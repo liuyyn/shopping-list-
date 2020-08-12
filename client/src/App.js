@@ -1,13 +1,23 @@
 import React from "react";
-import "./App.css";
 import AppNavbar from "./components/AppNavbar";
+import ShoppingList from "./components/ShoppingList";
+
+// in order to use the redux store in our app, we need to bring in the Provider from react-redux (package that binds react and redux together)
+import { Provider } from "react-redux"; // binds react and reduc together
+import store from "./store";
+
 import "bootstrap/dist/css/bootstrap.min.css"; // bootstrap is now included in the app by importing this
+import "./App.css";
 
 function App() {
   return (
-    <div className="App">
-      <AppNavbar />
-    </div>
+    // to be able to use store in our app, wrap it inside a <Provider></Provider>
+    <Provider store={store}>
+      <div className="App">
+        <AppNavbar />
+        <ShoppingList />
+      </div>
+    </Provider>
   );
 }
 

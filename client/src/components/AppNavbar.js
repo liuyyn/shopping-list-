@@ -25,7 +25,7 @@ class AppNavbar extends Component {
     return (
       <div>
         {/* mb-5: margin bottom spacing with a sizing of 5 --- check bootstrap documentation */}
-        <Navbar color="dark" dark expand="sm" className="mb-5">
+        <Navbar color="light" light expand="sm" className="mb-5">
           <Container>
             <NavbarBrand href="/">Shopping List</NavbarBrand>
             <NavbarToggler onClick={this.toggle} />
