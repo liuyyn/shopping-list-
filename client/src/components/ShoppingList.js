@@ -17,7 +17,7 @@ class ShoppingList extends Component {
   };
 
   render() {
-    const { items } = this.props.item; // destructuring:  item represents the entire state object; items is a key value of the state which maps to the an array of items with id, name, etc.
+    const { items } = this.props.item; // destructuring: item represents the entire state object; items is a key value of the state which maps to the shoppingList array
 
     return (
       <ListGroup>
