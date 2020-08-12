@@ -1,6 +1,8 @@
 import React from "react";
+import { Container } from "reactstrap";
 import AppNavbar from "./components/AppNavbar";
 import ShoppingList from "./components/ShoppingList";
+import ItemModal from "./components/itemModal";
 
 // in order to use the redux store in our app, we need to bring in the Provider from react-redux (package that binds react and redux together)
 import { Provider } from "react-redux"; // binds react and reduc together
@@ -15,7 +17,10 @@ function App() {
     <Provider store={store}>
       <div className="App">
         <AppNavbar />
-        <ShoppingList />
+        <Container>
+          <ItemModal />
+          <ShoppingList />
+        </Container>
       </div>
     </Provider>
   );

@@ -1,64 +1,61 @@
 import React, { Component } from "react";
 import { Container, ListGroup, ListGroupItem, Button } from "reactstrap";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { connect } from "react-redux"; // allows us to get state from redux into our react component
+import { getItems, deleteItem } from "../actions/itemActions";
+import PropTypes from "prop-types";
 import { v4 as uuid } from "uuid";
 
 class ShoppingList extends Component {
-  state = {
-    items: [
-      { id: uuid(), name: "Eggs" },
-      { id: uuid(), name: "Milk" },
-      { id: uuid(), name: "Steak" },
-      { id: uuid(), name: "Water" },
-    ],
+  // lifecycle method that runs when the compnent mounts
+  componentDidMount() {
+    this.props.getItems(); // calling the getItems action function everytime the component mounts
+  }
+
+  onDeleteClick = (id) => {
+    this.props.deleteItem(id); // by running the action function (getItems, deleteItems, etc), it will dispatch (send) the action type to the reducer which will take it as an argument along with the state and return the new state that will match the action type
   };
 
   render() {
-    const { items } = this.state;
+    const { items } = this.props.item; // destructuring:  item represents the entire state object; items is a key value of the state which maps to the an array of items with id, name, etc.
 
     return (
-      <Container>
-        <Button
-          color="light"
-          style={{ marginBottom: "2rem" }}
-          onClick={() => {
-            const name = prompt("Enter Item");
-            if (name) {
-              this.setState({
-                items: [...this.state.items, { id: uuid(), name: name }],
-              });
-            }
-          }}
-        >
-          Add Item
-        </Button>
-
-        <ListGroup>
-          <TransitionGroup className="shopping-list">
-            {items.map(({ id, name }) => (
-              <CSSTransition key={id} timeout={500} classNames="dark">
-                <ListGroupItem>
-                  <Button
-                    className="remove-btn"
-                    color="danger"
-                    size="sm"
-                    onClick={() => {
-                      this.setState((state) => ({
-                        items: state.items.filter((item) => item.id !== id), // whatever item we clicked on will be deleted from the array of items
-                      }));
-                    }}
-                  >
-                    &times;
-                  </Button>
-                  {name}
-                </ListGroupItem>
-              </CSSTransition>
-            ))}
-          </TransitionGroup>
-        </ListGroup>
-      </Container>
+      <ListGroup>
+        <TransitionGroup className="shopping-list">
+          {items.map(({ id, name }) => (
+            <CSSTransition key={id} timeout={500} classNames="dark">
+              <ListGroupItem>
+                <Button
+                  className="remove-btn"
+                  color="danger"
+                  size="sm"
+                  onClick={this.onDeleteClick.bind(this, id)} // binding this to the id from .map({id, name}) method above
+                >
+                  &times;
+                </Button>
+                {name}
+              </ListGroupItem>
+            </CSSTransition>
+          ))}
+        </TransitionGroup>
+      </ListGroup>
     );
   }
 }
 
-export default ShoppingList;
+// validating the ShoppingList component's props
+ShoppingList.propTypes = {
+  // bringing in an action from redux will be stored as props and we can access it as this.props.getItems because of the matchDispatchToProps function as argument to the connect method from the react-redux package which allows us to use the redux store (state) in our react compnents by accessing them via props
+  getItems: PropTypes.func.isRequired,
+  deleteItem: PropTypes.func.isRequired,
+  item: PropTypes.object.isRequired,
+};
+
+// determines what state is passed to our component via props
+const mapStateToProps = (state) => ({
+  // we can now access everything inside this object via this.props.item, this.props.xxx, etc.
+  item: state.item, // using state.item because item is what we called it in our rootReducer (reducer/index.js)
+});
+
+export default connect(mapStateToProps, { getItems, deleteItem })(ShoppingList); // connect allows us to get state from redux into our react component
+// mapStateToProps allows us to take pass pass props to our component and use that prop as State
