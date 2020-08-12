@@ -44,3 +44,7 @@ router.delete("/:id", (req, res) => {
 
 // export router to be able to use it in other files
 module.exports = router;
+
+//mvc architecture : model view controller
+// controller: backend
+// view: frontend
