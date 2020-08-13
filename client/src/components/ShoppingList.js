@@ -1,15 +1,14 @@
 import React, { Component } from "react";
-import { Container, ListGroup, ListGroupItem, Button } from "reactstrap";
+import { ListGroup, ListGroupItem, Button } from "reactstrap";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { connect } from "react-redux"; // allows us to get state from redux into our react component
 import { getItems, deleteItem } from "../actions/itemActions";
 import PropTypes from "prop-types";
-import { v4 as uuid } from "uuid";
 
 class ShoppingList extends Component {
   // lifecycle method that runs when the compnent mounts
   componentDidMount() {
-    this.props.getItems(); // calling the getItems action function everytime the component mounts
+    this.props.getItems(); // calling the getItems action function everytime the component mounts which will add the items from db to the redux store so we can use it with react
   }
 
   onDeleteClick = (id) => {
@@ -22,14 +21,14 @@ class ShoppingList extends Component {
     return (
       <ListGroup>
         <TransitionGroup className="shopping-list">
-          {items.map(({ id, name }) => (
-            <CSSTransition key={id} timeout={500} classNames="dark">
+          {items.map(({ _id, name }) => (
+            <CSSTransition key={_id} timeout={500} classNames="dark">
               <ListGroupItem>
                 <Button
                   className="remove-btn"
                   color="danger"
                   size="sm"
-                  onClick={this.onDeleteClick.bind(this, id)} // binding this to the id from .map({id, name}) method above
+                  onClick={this.onDeleteClick.bind(this, _id)} // binding this to the id from .map({id, name}) method above
                 >
                   &times;
                 </Button>

@@ -4,7 +4,7 @@ import rootReducer from "./reducers";
 
 const initialState = {};
 
-const middleware = [thunk];
+const middleware = [thunk]; // thunk allows us to make async request
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // add support for Redux dev tools e.g. so we can see the redux store with redux devtools
 

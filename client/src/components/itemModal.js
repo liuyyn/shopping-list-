@@ -12,7 +12,6 @@ import {
 import { connect } from "react-redux";
 import { addItem } from "../actions/itemActions";
 import PropTypes from "prop-types";
-import { v4 as uuid } from "uuid";
 
 class ItemModal extends Component {
   state = {
@@ -39,7 +38,6 @@ class ItemModal extends Component {
     e.preventDefault(); // preventing the webpage to reload everytime we hit submit
 
     const newItem = {
-      id: uuid(),
       name: this.state.name, // this.state.name handled by method this.onChange by setting this.state.name to input value (for ADD_ITEM action)
     };
 
