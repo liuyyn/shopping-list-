@@ -10,10 +10,11 @@ const Item = require("../../models/Item");
 // @desc    Get all Items
 // @access  Public
 router.get("/", (req, res) => {
+  // when url is http://localhost:5000/api/items and we have a GET request from the frontend, it will trigger its the call (router.get()) and will return the data in json format sorted by date added decresing
   // when at /api/items, get all data from DB and display it as json
   Item.find() // returns a Promise ; get all items in DB
     .sort({ date: -1 }) // sort by the date descending (so we put -1; if want ascending put 1)
-    .then((items) => res.json(items));
+    .then((items) => res.json(items)); // GET data from database and return in json format on port 5000
 });
 
 // @route   POST api/items ; POST request
@@ -29,7 +30,7 @@ router.post("/", (req, res) => {
   // save newItem to the database MongoDB (promise based)
   newItem
     .save()
-    .then((item) => res.json(item))
+    .then((item) => res.json(item)) // returns the new item added
     .catch((err) => console.log(err)); // display item saved in json on webpage
 });
 
