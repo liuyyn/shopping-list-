@@ -25,7 +25,7 @@ export const addItem = (item) => (dispatch) => {
     // sending to reducer the object inside dispatch
     dispatch({
       type: ADD_ITEM,
-      payload: res.data, //res.data is the new added item; from posrt request of backend, returns the new added item
+      payload: res.data, //res.data is the new added item; from post request of backend, returns the new added item
     })
   );
 };
