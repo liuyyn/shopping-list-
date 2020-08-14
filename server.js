@@ -1,27 +1,35 @@
 // importing modules needed
 const express = require("express");
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser"); // allows us to take request and get data from the body
 const path = require("path"); // nodejs module so we don't have to do npm install path
-
-const items = require("./routes/api/items");
+const config = require("config");
 
 const app = express();
 
-// bodyParser Middleware
-app.use(bodyParser.json());
+// allows us to take request and get and parse data from the body (replaces body-parser)
+app.use(express.json());
 
 // DB config
-const db = require("./config/keys").mongoURI; // gives us the value on mongoURI from file keys.js
+const db = config.get("mongoURI"); // gives us the value on mongoURI from ./config/default.json file
 
 // connect to MongoDB using mongoose
 mongoose
-  .connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(db, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  })
   .then(() => console.log("MongoDB Connected..."))
   .catch((err) => console.log(err));
 
+// import routes files
+const items = require("./routes/api/items"); // items variable points to the items.js file in routes/api
+const users = require("./routes/api/users");
+const auth = require("./routes/api/auth");
 // Use Routes
-app.use("/api/items", items); // every time we get a path /api/items, it will go to the items variable i.e. the file from ./routes/api/items
+app.use("/api/items", items); // every time server gets a request path /api/items, it will go to the items variable i.e. the file from ./routes/api/items
+app.use("/api/users", users);
+app.use("/api/auth", auth);
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === "production") {
