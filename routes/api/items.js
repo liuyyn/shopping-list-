@@ -1,6 +1,7 @@
 // where are the api routes will go
 const express = require("express");
 const router = express.Router();
+const auth = require("../../middleware/auth");
 
 // Item Model
 const Item = require("../../models/Item");
@@ -18,13 +19,14 @@ router.get("/", (req, res) => {
 });
 
 // @route   POST api/items ; POST request
-// @desc    Create Aan Item
-// @access  Public
-router.post("/", (req, res) => {
+// @desc    Create An Item
+// @access  Private
+// adding auth to arg of POST request to protect it (need to be logged into account to add item)
+router.post("/", auth, (req, res) => {
   // want to add an Item to the database
   const newItem = new Item({
     // an instance of the model is called a Document
-    name: req.body.name, // date will be automatically inserted
+    name: req.body.name, // date will be automatically insertede
   });
 
   // save newItem to the database MongoDB (promise based)
@@ -36,8 +38,8 @@ router.post("/", (req, res) => {
 
 // @route   DELETE api/items/:id
 // @desc    Delete An Item
-// @access  Public
-router.delete("/:id", (req, res) => {
+// @access  Private
+router.delete("/:id", auth, (req, res) => {
   Item.findById(req.params.id)
     .then((item) => item.remove().then(() => res.json({ sucess: true })))
     .catch((err) => res.status(404).json({ sucess: false })); // sending a 404 response for failure of finding id
