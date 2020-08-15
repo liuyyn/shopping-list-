@@ -24,14 +24,16 @@ class ShoppingList extends Component {
           {items.map(({ _id, name }) => (
             <CSSTransition key={_id} timeout={500} classNames="dark">
               <ListGroupItem>
-                <Button
-                  className="remove-btn"
-                  color="danger"
-                  size="sm"
-                  onClick={this.onDeleteClick.bind(this, _id)} // binding this to the id from .map({id, name}) method above
-                >
-                  &times;
-                </Button>
+                {this.props.isAuthenticated ? (
+                  <Button
+                    className="remove-btn"
+                    color="danger"
+                    size="sm"
+                    onClick={this.onDeleteClick.bind(this, _id)} // binding this to the id from .map({id, name}) method above
+                  >
+                    &times;
+                  </Button>
+                ) : null}
                 {name}
               </ListGroupItem>
             </CSSTransition>
@@ -48,12 +50,14 @@ ShoppingList.propTypes = {
   getItems: PropTypes.func.isRequired,
   deleteItem: PropTypes.func.isRequired,
   item: PropTypes.object.isRequired,
+  isAuthenticated: PropTypes.bool,
 };
 
 // determines what state is passed to our component via props
 const mapStateToProps = (state) => ({
   // we can now access everything inside this object via this.props.item, this.props.xxx, etc.
   item: state.item, // using state.item because item is what we called it in our rootReducer (reducer/index.js)
+  isAuthenticated: state.auth.isAuthenticated,
 });
 
 export default connect(mapStateToProps, { getItems, deleteItem })(ShoppingList); // connect allows us to get state from redux into our react component
