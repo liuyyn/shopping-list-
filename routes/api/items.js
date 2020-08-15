@@ -26,7 +26,8 @@ router.post("/", auth, (req, res) => {
   // want to add an Item to the database
   const newItem = new Item({
     // an instance of the model is called a Document
-    name: req.body.name, // date will be automatically insertede
+    // accessing the data from the POST request from frontend function addItem from itemActions.js
+    name: req.body.name, // date will be automatically inserted
   });
 
   // save newItem to the database MongoDB (promise based)

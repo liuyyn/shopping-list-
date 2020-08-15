@@ -23,7 +23,7 @@ router.post("/", (req, res) => {
     return res.status(400).json({ msg: "Please enter all fields" }); // sending back a response status of 400 along with a message in json
   }
 
-  // check if existing user to log in
+  // check if existing user to log in (findOne returns the user with "email")
   User.findOne({ email }).then((user) => {
     if (!user) return res.status(400).json({ msg: "User does not exists" });
 
@@ -32,11 +32,11 @@ router.post("/", (req, res) => {
       // if password does not match, send error message
       if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
 
-      // otherwise (password match), sign the token
+      // otherwise (password match), sign the token (returns the json web token string)
       jwt.sign(
         { id: user.id },
         config.get("jwtSecret"),
-        { expiresIn: 3600 },
+        { expiresIn: 3600 }, // 1 hour
         // sign callback
         (err, token) => {
           if (err) throw err;

@@ -1,5 +1,7 @@
 import { GET_ITEMS, ADD_ITEM, DELETE_ITEM, ITEMS_LOADING } from "./types";
 import axios from "axios";
+import { tokenConfig } from "./authActions";
+import { returnErrors } from "./errorActions";
 
 export const getItems = () => (dispatch) => {
   // calling setItemsLoading() to keep track of when the data is fetched from the database
@@ -16,23 +18,31 @@ export const getItems = () => (dispatch) => {
         type: GET_ITEMS,
         payload: res.data, // data that comes in from the backend when we hit /api/items endpoint
       })
+    )
+    .catch((err) =>
+      dispatch(returnErrors(err.response.data, err.response.status))
     );
 };
 
-export const addItem = (item) => (dispatch) => {
+export const addItem = (item) => (dispatch, getState) => {
   // POST item request (add item)
-  axios.post("api/items", item).then((res) =>
-    // sending to reducer the object inside dispatch
-    dispatch({
-      type: ADD_ITEM,
-      payload: res.data, //res.data is the new added item; from post request of backend, returns the new added item
-    })
-  );
+  axios
+    .post("api/items", item, tokenConfig(getState))
+    .then((res) =>
+      // sending to reducer the object inside dispatch
+      dispatch({
+        type: ADD_ITEM,
+        payload: res.data, //res.data is the new added item; from post request of backend, returns the new added item
+      })
+    )
+    .catch((err) =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
 };
 
-export const deleteItem = (id) => (dispatch) => {
+export const deleteItem = (id) => (dispatch, getState) => {
   // DELETE item request
-  axios.delete(`api/items/${id}`).then((res) =>
+  axios.delete(`api/items/${id}`, tokenConfig(getState)).then((res) =>
     dispatch({
       type: DELETE_ITEM,
       payload: id,
