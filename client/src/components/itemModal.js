@@ -96,7 +96,7 @@ class ItemModal extends Component {
 
 ItemModal.propTypes = {
   addItem: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool.isRequired,
+  isAuthenticated: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
